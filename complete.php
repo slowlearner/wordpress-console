@@ -2,16 +2,21 @@
 require( 'common.php' );
 
 if ( isset($_POST['partial'] ) ) {
+  $candidate = array();
   $secret = get_option('wordpress-console-secret');
   if ( !$secret ) {
-    return;
+    die( json_encode( $candidate ) );
   }
 
   if ( !isset( $_POST['signature'] ) || !$_POST['signature'] ) {
-    return;
+    die( json_encode( $candidate ) );
   }
 
   $partial = stripslashes( $_POST['partial'] );
+  $partial = trim($partial);
+  if(empty($partial)) {
+      die( json_encode( $candidate ) );
+  }
   if ( hash_hmac( 'sha1', $partial, $secret ) != $_POST['signature'] ) {
     return;
   }
