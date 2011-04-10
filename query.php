@@ -12,11 +12,11 @@ if ( !isset( $_POST['signature'] ) || !$_POST['signature'] ) {
   return;
 }
 
-if ( !isset( $_POST['query'] ) || !$_POST['query'] ) {
-  return;
+$query = stripslashes( $_POST['query'] );
+if ( !isset( $_POST['query'] ) || empty($query)) {
+    print json_encode( array( 'output' => 'partial' ) );
 }
 
-$query = stripslashes( $_POST['query'] );
 
 if ( hash_hmac( 'sha1', $query, $secret ) != $_POST['signature'] ) {
   return;
